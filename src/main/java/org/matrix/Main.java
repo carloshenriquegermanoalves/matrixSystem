@@ -1,2 +1,4 @@
-package org.matrix;public class Main {
+package org.matrix;
+
+public class Main {
 }
