@@ -12,5 +12,7 @@ public interface MatrixSystem {
     double cofactorMatrix(Matrix matrix, int row, int col);
     Matrix scaleMatrix(Matrix matrix);
     void swapRows(Matrix matrix, int row1, int row2);
+    void scaleRow(Matrix matrix, int row, double scalar);
+    void addRowToRow(int i, int pivotRow, double v)
     void printMatrix(Matrix matrix);
 }

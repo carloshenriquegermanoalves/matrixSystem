@@ -125,7 +125,6 @@ public class SystemImplementation implements MatrixSystem {
     @Override
     public Matrix scaleMatrix(Matrix matrix) {
         int pivotRow = 0;
-
         for (int col = 0; col < matrix.getCols(); col++) {
             //Encontra uma linha não nula na coluna atual
             int noZeroRow = pivotRow;
@@ -142,13 +141,21 @@ public class SystemImplementation implements MatrixSystem {
 
             //Faz o elemento da diagonal (pivô) igual a 1
             double pivotElement = matrix.getPosition(pivotRow, col);
-            //TODO if (pivotElement != 1)
+            if (pivotElement != 1)
+                scaleRow(matrix, pivotRow, 1.0 / pivotElement);
 
+            //Zera todos os elementos abaixo do pivô da mesma coluna
+            for (int i = pivotRow + 1; i < matrix.getRows(); i++) {
+                double factor = matrix.getPosition(i, col);
+                addRowToRow(i, pivotRow, -factor);
+            }
 
+            //Avança para a próxima linha pivô
+            pivotRow++;
         }
-
-        return null;
+        return matrix;
     }
+
 
     @Override
     public void swapRows(Matrix matrix, int row1, int row2) {
@@ -162,6 +169,23 @@ public class SystemImplementation implements MatrixSystem {
         } else {
             throw new IllegalArgumentException("Índices de linha inválidos.");
         }
+    }
+
+    @Override
+    public void scaleRow(Matrix matrix, int row, double scalar) {
+        if (row >= 0 && row < matrix.getRows()) {
+            for (int col = 0; col < matrix.getCols(); col++) {
+                double value = matrix.getPosition(row, col);
+                matrix.setMatrix(row, col, value * scalar);
+            }
+        } else {
+            throw new IllegalArgumentException("Índice de linha inválido.");
+        }
+    }
+
+    @Override
+    public void addRowToRow(int i, int pivotRow, double v) {
+
     }
 
     @Override
