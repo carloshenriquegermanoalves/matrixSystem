@@ -31,5 +31,8 @@ public class Matrix {
     public double getPosition(int rowSquare, int colSquare) {
         return this.matrix[rowSquare][colSquare];
     }
+    public int getSize() {
+        return getRows() * getCols();
+    }
 
 }

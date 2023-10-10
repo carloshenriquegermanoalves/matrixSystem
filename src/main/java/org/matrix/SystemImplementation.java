@@ -1,6 +1,6 @@
 package org.matrix;
 
-public class SystemImplementation implements System {
+public class SystemImplementation implements MatrixSystem {
     @Override
     public boolean isPossibleAddOrSubtractOrMultiply(Matrix matrixA, Matrix matrixB) {
         return matrixA.getCols() != matrixB.getRows();
@@ -49,21 +49,25 @@ public class SystemImplementation implements System {
         return result;
     }
 
-
     @Override
     public Matrix multiplyingMatrix(Matrix matrixA, Matrix matrixB) {
-        if (isPossibleAddOrSubtractOrMultiply(matrixA, matrixB))
-            throw new IllegalArgumentException("As matrizes não podem ser multiplicadas, pois possuem dimensões diferentes!");
+        if (matrixA.getCols() != matrixB.getRows()) {
+            throw new IllegalArgumentException("As matrizes não podem ser multiplicadas, pois possuem dimensões incompatíveis!");
+        }
 
-        Matrix result = new Matrix(matrixA.getRows(), matrixA.getCols());
+        Matrix result = new Matrix(matrixA.getRows(), matrixB.getCols());
         for (int i = 0; i < matrixA.getRows(); i++) {
-            for (int j = 0; j < matrixA.getCols(); j++) {
-                double mult = matrixA.getPosition(i, j) * matrixB.getPosition(i, j);
-                result.setMatrix(i, j, mult);
+            for (int j = 0; j < matrixB.getCols(); j++) {
+                double sum = 0.0;
+                for (int k = 0; k < matrixA.getCols(); k++) {
+                    sum += matrixA.getPosition(i, k) * matrixB.getPosition(k, j);
+                }
+                result.setMatrix(i, j, sum);
             }
         }
         return result;
     }
+
 
 
     @Override
@@ -117,5 +121,58 @@ public class SystemImplementation implements System {
         }
         return determinantMatrix(subMatrix);
     }
+
+    @Override
+    public Matrix scaleMatrix(Matrix matrix) {
+        int pivotRow = 0;
+
+        for (int col = 0; col < matrix.getCols(); col++) {
+            //Encontra uma linha não nula na coluna atual
+            int noZeroRow = pivotRow;
+            while (noZeroRow < matrix.getRows() && matrix.getPosition(noZeroRow, col) == 0)
+                noZeroRow++;
+
+            //Se não encontrou uma linha não nula, troque as linhas, se necessário
+            if (noZeroRow == matrix.getRows())
+                continue;
+
+            //Se encontrou uma linha não nula, troque as linhas, se necessário
+            if (noZeroRow != pivotRow)
+                this.swapRows(matrix, noZeroRow, pivotRow);
+
+            //Faz o elemento da diagonal (pivô) igual a 1
+            double pivotElement = matrix.getPosition(pivotRow, col);
+            //TODO if (pivotElement != 1)
+
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public void swapRows(Matrix matrix, int row1, int row2) {
+        if (row1 >= 0 && row1 < matrix.getRows() && row2 >= 0 && row2 < matrix.getRows()) {
+            double[] tempRow = new double[matrix.getCols()];
+            for (int col = 0; col < matrix.getCols(); col++) {
+                tempRow[col] = matrix.getPosition(row1, col);
+                matrix.setMatrix(row1, col, matrix.getPosition(row2, col));
+                matrix.setMatrix(row2, col, tempRow[col]);
+            }
+        } else {
+            throw new IllegalArgumentException("Índices de linha inválidos.");
+        }
+    }
+
+    @Override
+    public void printMatrix(Matrix matrix) {
+        for (int i = 0; i < matrix.getRows(); i++) {
+            for (int j = 0; j < matrix.getCols(); j++) {
+                System.out.print(matrix.getPosition(i, j) + " ");
+            }
+            System.out.println(); // Avança para a próxima linha após imprimir uma linha completa
+        }
+    }
+
 
 }
