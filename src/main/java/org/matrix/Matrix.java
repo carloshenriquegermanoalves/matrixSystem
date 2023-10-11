@@ -12,10 +12,6 @@ public class Matrix {
         this.matrix = new double[rows][cols];
     }
 
-    public double getMatrix() {
-        return matrix[rows][cols];
-    }
-
     public void setMatrix(int rows, int cols, double value) {
         matrix[rows][cols] = value;
     }
@@ -30,9 +26,6 @@ public class Matrix {
 
     public double getPosition(int rowSquare, int colSquare) {
         return this.matrix[rowSquare][colSquare];
-    }
-    public int getSize() {
-        return getRows() * getCols();
     }
 
 }
