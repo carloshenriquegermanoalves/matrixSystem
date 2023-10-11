@@ -2,9 +2,9 @@ package org.matrix;
 
 public class Matrix {
 
-    private int rows;
-    private int cols;
-    private double[][] matrix;
+    private final int rows;
+    private final int cols;
+    private final double[][] matrix;
 
     public Matrix(int rows, int cols) {
         this.rows = rows;
@@ -30,6 +30,9 @@ public class Matrix {
 
     public double getPosition(int rowSquare, int colSquare) {
         return this.matrix[rowSquare][colSquare];
+    }
+    public int getSize() {
+        return getRows() * getCols();
     }
 
 }
