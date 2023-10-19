@@ -11,6 +11,10 @@ public interface MatrixSystem {
     double determinantMatrix(Matrix matrix);
     double cofactorMatrix(Matrix matrix, int row, int col);
     void scaleMatrix(Matrix matrix);
+    Matrix extractInverse(Matrix augmentedMatrix, int row, int col);
+    Matrix invertMatrix(Matrix matrix);
+    Matrix augmentWithIdentity(Matrix matrix);
+
     void printMatrix(Matrix matrix);
 
 }

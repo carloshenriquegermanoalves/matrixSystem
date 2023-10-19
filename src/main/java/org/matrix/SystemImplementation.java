@@ -143,6 +143,56 @@ public class SystemImplementation implements MatrixSystem {
     }
 
     @Override
+    public Matrix extractInverse(Matrix augmentedMatrix, int row, int col) {
+        Matrix inverseMatrix = new Matrix(row, col);
+
+        // Extraia a parte direita da matriz aumentada como a matriz inversa
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                inverseMatrix.setMatrix(i, j, augmentedMatrix.getPosition(i, col + j));
+            }
+        }
+
+        return inverseMatrix;
+    }
+
+    @Override
+    public Matrix invertMatrix(Matrix matrix) {
+
+        if (matrix.getRows() != matrix.getCols()) {
+            throw new IllegalArgumentException("A matriz não é quadrada e não pode ser invertida.");
+        }
+
+        // Concatene a matriz original com a matriz identidade
+        Matrix augmentedMatrix = augmentWithIdentity(matrix);
+
+        // Escalone a matriz aumentada usando Gauss-Jordan
+        scaleMatrix(augmentedMatrix);
+
+        // Extraia a parte direita da matriz aumentada como a matriz inversa
+        Matrix inverseMatrix = extractInverse(augmentedMatrix, matrix.getRows(), matrix.getCols());
+
+        return inverseMatrix;
+    }
+
+    @Override
+    public Matrix augmentWithIdentity(Matrix matrix) {
+        int numRows = matrix.getRows();
+        int numCols = matrix.getCols();
+        Matrix augmentedMatrix = new Matrix(matrix.getRows(), matrix.getCols() * 2);
+
+        // Preencha a matriz aumentada com a matriz original e a matriz identidade
+        for (int i = 0; i < matrix.getRows(); i++) {
+            for (int j = 0; j < matrix.getCols(); j++)
+                augmentedMatrix.setMatrix(i, j, matrix.getPosition(i, j));
+            augmentedMatrix.setMatrix(i, numCols + i, 1.0);
+        }
+
+        return augmentedMatrix;
+    }
+
+
+    @Override
     public void printMatrix(Matrix matrix) {
         System.out.println("Operação realizada com sucesso!");
         for (int i = 0; i < matrix.getRows(); i++) {

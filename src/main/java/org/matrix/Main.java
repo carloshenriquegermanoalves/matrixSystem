@@ -19,11 +19,12 @@ public class Main {
                 5. Multiplicação de matriz por escalar
                 6. Determinante de uma matriz
                 7. Escalonamento de uma matriz
-                8. Sair do sistema
+                8. Inversa de uma matriz
+                9. Sair do sistema
                 """);
             String option = input.nextLine();
             switch (option) {
-                case "1", "5", "6", "7" -> {
+                case "1", "5", "6", "7", "8" -> {
                     Matrix matrix = createMatrix(input);
                     System.out.println("Matriz criada com sucesso!");
                     switch (option) {
@@ -35,6 +36,7 @@ public class Main {
                         }
                         case "6" -> System.out.println(systemImplementation.determinantMatrix(matrix));
                         case "7" -> systemImplementation.scaleMatrix(matrix);
+                        case "8" -> systemImplementation.invertMatrix(matrix);
                     }
                 }
                 case "2", "3", "4" -> {
@@ -46,7 +48,7 @@ public class Main {
                         default -> systemImplementation.multiplyingMatrix(matrix1, matrix2);
                     }
                 }
-                case "8" -> userContinue = false;
+                case "9" -> userContinue = false;
                 default -> System.out.println("Opção inválida! Tente novamente");
             }
         }
