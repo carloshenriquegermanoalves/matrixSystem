@@ -13,6 +13,11 @@ public class SystemImplementation implements MatrixSystem {
     }
 
     @Override
+    public boolean isInvertible(Matrix matrix) {
+        return determinantMatrix(matrix) != 0;
+    }
+
+    @Override
     public void addingMatrix(Matrix matrixA, Matrix matrixB) {
         if (isPossibleAddOrSubtract(matrixA, matrixB))
             System.out.println("As matrizes não podem ser somadas, por terem dimensões incompatíveis!");
@@ -81,13 +86,11 @@ public class SystemImplementation implements MatrixSystem {
 
     @Override
     public double determinantMatrix(Matrix matrix) {
-        if (matrix.getRows() == 1 && matrix.getCols() == 1)
-            return matrix.getPosition(0, 0);
+        if (matrix.getRows() == 1 && matrix.getCols() == 1) return matrix.getPosition(0, 0);
         else {
             double determinant;
             if (matrix.getRows() == 2 && matrix.getCols() == 2) {
-                determinant = (matrix.getPosition(0, 0) * matrix.getPosition(1, 1)) -
-                        (matrix.getPosition(0, 1) * matrix.getPosition(1, 0));
+                determinant = (matrix.getPosition(0, 0) * matrix.getPosition(1, 1)) - (matrix.getPosition(0, 1) * matrix.getPosition(1, 0));
             } else {
                 determinant = 0.0;
                 for (int col = 0; col < matrix.getCols(); col++) {
@@ -143,49 +146,56 @@ public class SystemImplementation implements MatrixSystem {
     }
 
     @Override
-    public Matrix extractInverse(Matrix augmentedMatrix, int row, int col) {
+    public void invertMatrix(Matrix matrix) {
+        if (matrix.getRows() != matrix.getCols())
+            System.out.println("A matriz não é quadrada e não pode ser invertida.");
+
+        else if (!isInvertible(matrix))
+            System.out.println("A matriz não pode ser invertida, pois seu determinante é igual a 0");
+
+        else {
+            Matrix augmentedMatrix = augmentWithIdentity(matrix);
+
+            scaleMatrix(augmentedMatrix);
+
+            extractInverse(augmentedMatrix, matrix.getRows(), matrix.getCols());
+        }
+    }
+
+    @Override
+    public void extractInverse(Matrix augmentedMatrix, int row, int col) {
         Matrix inverseMatrix = new Matrix(row, col);
 
-        // Extraia a parte direita da matriz aumentada como a matriz inversa
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 inverseMatrix.setMatrix(i, j, augmentedMatrix.getPosition(i, col + j));
             }
         }
 
-        return inverseMatrix;
     }
 
     @Override
-    public Matrix invertMatrix(Matrix matrix) {
+    public void transposedMatrix(Matrix matrix) {
+        Matrix transposedMatrix = new Matrix(matrix.getCols(), matrix.getRows());
 
-        if (matrix.getRows() != matrix.getCols()) {
-            throw new IllegalArgumentException("A matriz não é quadrada e não pode ser invertida.");
+        for (int i = 0; i < matrix.getRows(); i++) {
+            for (int j = 0; j < matrix.getCols(); j++) {
+                transposedMatrix.setMatrix(j, i, matrix.getPosition(i, j));
+            }
         }
 
-        // Concatene a matriz original com a matriz identidade
-        Matrix augmentedMatrix = augmentWithIdentity(matrix);
-
-        // Escalone a matriz aumentada usando Gauss-Jordan
-        scaleMatrix(augmentedMatrix);
-
-        // Extraia a parte direita da matriz aumentada como a matriz inversa
-        Matrix inverseMatrix = extractInverse(augmentedMatrix, matrix.getRows(), matrix.getCols());
-
-        return inverseMatrix;
+        printMatrix(transposedMatrix);
     }
+
 
     @Override
     public Matrix augmentWithIdentity(Matrix matrix) {
-        int numRows = matrix.getRows();
-        int numCols = matrix.getCols();
         Matrix augmentedMatrix = new Matrix(matrix.getRows(), matrix.getCols() * 2);
 
-        // Preencha a matriz aumentada com a matriz original e a matriz identidade
         for (int i = 0; i < matrix.getRows(); i++) {
             for (int j = 0; j < matrix.getCols(); j++)
                 augmentedMatrix.setMatrix(i, j, matrix.getPosition(i, j));
-            augmentedMatrix.setMatrix(i, numCols + i, 1.0);
+            augmentedMatrix.setMatrix(i, matrix.getCols() + i, 1.0);
         }
 
         return augmentedMatrix;
@@ -194,7 +204,6 @@ public class SystemImplementation implements MatrixSystem {
 
     @Override
     public void printMatrix(Matrix matrix) {
-        System.out.println("Operação realizada com sucesso!");
         for (int i = 0; i < matrix.getRows(); i++) {
             for (int j = 0; j < matrix.getCols(); j++)
                 System.out.print("|" + matrix.getPosition(i, j) + "|");
