@@ -126,11 +126,9 @@ public class SystemImplementation implements MatrixSystem {
     public void scaleMatrix(Matrix matrix) {
         int numRows = matrix.getRows();
         int numCols = matrix.getCols();
-
         for (int row = 0; row < numRows; row++) {
-            if (matrix.getPosition(row, row) != 0) {
-                double pivot = matrix.getPosition(row, row);
-                for (int col = row; col < numCols; col++) {
+                for (int col = 0; col < numCols; col++) {
+                    double pivot = identifyPivot(matrix, row);
                     matrix.setMatrix(row, col, matrix.getPosition(row, col) / pivot);
                 }
                 for (int i = 0; i < numRows; i++) {
@@ -141,9 +139,9 @@ public class SystemImplementation implements MatrixSystem {
                     }
                 }
             }
-        }
         printMatrix(matrix);
-    }
+        }
+
 
     @Override
     public void invertMatrix(Matrix matrix) {
@@ -200,8 +198,19 @@ public class SystemImplementation implements MatrixSystem {
 
         return augmentedMatrix;
     }
+    public double identifyPivot(Matrix matrix, int row){
+        for (int cols = 0; cols < matrix.getCols(); cols++) {
+            if (matrix.getPosition(row, cols) != 0){
+                return matrix.getPosition(row,cols);
+            }
+        }
+        return 0;
+    }
+    public Matrix organizeMatrix(Matrix matrix){
+        for (int i = 0; i < matrix.getRows(); i++) {
 
-
+        }
+    }
     @Override
     public void printMatrix(Matrix matrix) {
         for (int i = 0; i < matrix.getRows(); i++) {
