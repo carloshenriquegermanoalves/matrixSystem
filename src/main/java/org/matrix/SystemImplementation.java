@@ -126,19 +126,28 @@ public class SystemImplementation implements MatrixSystem {
     public void scaleMatrix(Matrix matrix) {
         int numRows = matrix.getRows();
         int numCols = matrix.getCols();
+        organizeMatrix(matrix);
         for (int row = 0; row < numRows; row++) {
-            for (int col = row; col < numCols; col++) {
-                double pivot = identifyPivot(matrix, row);
-                matrix.setMatrix(row, col, matrix.getPosition(row, col) / pivot);
+            double pivot = identifyPivot(matrix, row);
+            if (pivot != 0) {
+                for (int col = row; col < numCols; col++) {
+                    matrix.setMatrix(row, col, matrix.getPosition(row, col) / pivot);
+                }
             }
+            System.out.println("------------------------------------"+(1)+"------------------------------------------");
+            printMatrix(matrix);
             for (int i = 0; i < numRows; i++) {
                 if (i != row) {
                     double factor = matrix.getPosition(i, row);
                     for (int j = row; j < numCols; j++)
                         matrix.setMatrix(i, j, matrix.getPosition(i, j) - factor * matrix.getPosition(row, j));
+                    System.out.println("------------------------------------"+(2)+"------------------------------------------");
+                    printMatrix(matrix);
                 }
+
             }
         }
+        organizeMatrix(matrix);
         printMatrix(matrix);
     }
 
