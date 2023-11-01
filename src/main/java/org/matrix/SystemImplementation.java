@@ -131,8 +131,8 @@ public class SystemImplementation implements MatrixSystem {
         printMatrix(organizedMatrix);
         for (int row = 0; row < numRows; row++) {
             double pivot = identifyPivot(organizedMatrix, row);
-            if (pivot != 0) {
-                for (int col = row; col < numCols; col++) {
+            for (int col = row; col < numCols; col++) {
+                if (pivot != 0) {
                     organizedMatrix.setMatrix(row, col, organizedMatrix.getPosition(row, col) / pivot);
                 }
             }
