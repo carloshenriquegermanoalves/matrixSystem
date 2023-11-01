@@ -8,7 +8,7 @@ class SystemImplementationTest {
     @Test
     public void scaleMatrixTest(){
         SystemImplementation system = new SystemImplementation();
-        double[][] matrix1 = {{1,2,3},{0,0,0},{0,2,1}};
+        double[][] matrix1 = {{1,2,3},{0,0,1},{0,0,0}};
         Matrix matrix = new Matrix(3,3);
         matrix.setMatrix(matrix1);
         system.scaleMatrix(matrix);
