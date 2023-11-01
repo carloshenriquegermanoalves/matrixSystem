@@ -4,7 +4,7 @@ public class Matrix {
 
     private final int rows;
     private final int cols;
-    private final double[][] matrix;
+    private double[][] matrix;
 
     public Matrix(int rows, int cols) {
         this.rows = rows;
@@ -14,6 +14,9 @@ public class Matrix {
 
     public void setMatrix(int rows, int cols, double value) {
         matrix[rows][cols] = value;
+    }
+    public void setMatrix(double[][] matrix){
+        this.matrix = matrix;
     }
 
     public int getRows() {
@@ -26,6 +29,9 @@ public class Matrix {
 
     public double getPosition(int rowSquare, int colSquare) {
         return this.matrix[rowSquare][colSquare];
+    }
+    public double[] getEntireRow(int row){
+        return this.matrix[row];
     }
 
 }

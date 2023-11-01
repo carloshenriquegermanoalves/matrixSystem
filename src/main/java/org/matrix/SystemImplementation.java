@@ -124,26 +124,34 @@ public class SystemImplementation implements MatrixSystem {
 
     @Override
     public void scaleMatrix(Matrix matrix) {
-        int numRows = matrix.getRows();
-        int numCols = matrix.getCols();
-
+        Matrix organizedMatrix = organizeMatrix(matrix);
+        int numRows = organizedMatrix.getRows();
+        int numCols = organizedMatrix.getCols();
         for (int row = 0; row < numRows; row++) {
-            if (matrix.getPosition(row, row) != 0) {
-                double pivot = matrix.getPosition(row, row);
+            double pivot = identifyPivot(organizedMatrix, row);
+            System.out.println("Pivo: " + pivot);
+            if (pivot != 0) {
                 for (int col = row; col < numCols; col++) {
-                    matrix.setMatrix(row, col, matrix.getPosition(row, col) / pivot);
-                }
-                for (int i = 0; i < numRows; i++) {
-                    if (i != row) {
-                        double factor = matrix.getPosition(i, row);
-                        for (int j = row; j < numCols; j++)
-                            matrix.setMatrix(i, j, matrix.getPosition(i, j) - factor * matrix.getPosition(row, j));
-                    }
+                    organizedMatrix.setMatrix(row, col, organizedMatrix.getPosition(row, col) / pivot);
                 }
             }
+            System.out.println("------------------------------------"+(1)+"------------------------------------------");
+            printMatrix(organizedMatrix);
+            for (int i = 0; i < numRows; i++) {
+                if (i != row) {
+                    double factor = matrix.getPosition(i,row);
+
+                    for (int j = row; j < numCols; j++)
+                        organizedMatrix.setMatrix(i, j, organizedMatrix.getPosition(i, j) - factor * organizedMatrix.getPosition(row, j));
+                    System.out.println("------------------------------------"+(2)+"------------------------------------------");
+                    printMatrix(organizedMatrix);
+                }
+
+            }
         }
-        printMatrix(matrix);
+        printMatrix(organizedMatrix);
     }
+
 
     @Override
     public void invertMatrix(Matrix matrix) {
@@ -201,6 +209,52 @@ public class SystemImplementation implements MatrixSystem {
         return augmentedMatrix;
     }
 
+    public double identifyPivot(Matrix matrix, int row){
+        for (int cols = 0; cols < matrix.getCols(); cols++) {
+            if (matrix.getPosition(row, cols) != 0){
+                return matrix.getPosition(row,cols);
+            }
+        }
+        return 0;
+    }
+
+    public int zeroCounter(double[] row) {
+        int count = 0;
+        for (double element : row) {
+            if (element == 0.0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public Matrix organizeMatrix(Matrix matrix) {
+        int numRows = matrix.getRows();
+        int numCols = matrix.getCols();
+        Matrix organizedMatrix = new Matrix(numRows, numCols);
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                organizedMatrix.setMatrix(i, j, matrix.getPosition(i, j));
+            }
+        }
+        for (int i = 0; i < numRows - 1; i++) {
+            for (int j = 0; j < numRows - i - 1; j++) {
+                int zeroCountCurrent = zeroCounter(organizedMatrix.getEntireRow(j));
+                int zeroCountNext = zeroCounter(organizedMatrix.getEntireRow(j + 1));
+
+                if (zeroCountCurrent > zeroCountNext) {
+                    for (int k = 0; k < numCols; k++) {
+                        double temp = organizedMatrix.getPosition(j, k);
+                        organizedMatrix.setMatrix(j, k, organizedMatrix.getPosition(j + 1, k));
+                        organizedMatrix.setMatrix(j + 1, k, temp);
+                    }
+                }
+            }
+        }
+
+        return organizedMatrix;
+    }
 
     @Override
     public void printMatrix(Matrix matrix) {
