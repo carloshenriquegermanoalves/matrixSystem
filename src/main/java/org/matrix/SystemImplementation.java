@@ -124,31 +124,32 @@ public class SystemImplementation implements MatrixSystem {
 
     @Override
     public void scaleMatrix(Matrix matrix) {
-        int numRows = matrix.getRows();
-        int numCols = matrix.getCols();
-        organizeMatrix(matrix);
+        Matrix organizedMatrix = organizeMatrix(matrix);
+        int numRows = organizedMatrix.getRows();
+        int numCols = organizedMatrix.getCols();
+        System.out.println("-------------------- matriz organizada -------------------------------");
+        printMatrix(organizedMatrix);
         for (int row = 0; row < numRows; row++) {
-            double pivot = identifyPivot(matrix, row);
+            double pivot = identifyPivot(organizedMatrix, row);
             if (pivot != 0) {
                 for (int col = row; col < numCols; col++) {
-                    matrix.setMatrix(row, col, matrix.getPosition(row, col) / pivot);
+                    organizedMatrix.setMatrix(row, col, organizedMatrix.getPosition(row, col) / pivot);
                 }
             }
             System.out.println("------------------------------------"+(1)+"------------------------------------------");
-            printMatrix(matrix);
+            printMatrix(organizedMatrix);
             for (int i = 0; i < numRows; i++) {
                 if (i != row) {
-                    double factor = matrix.getPosition(i, row);
+                    double factor = organizedMatrix.getPosition(i, row);
                     for (int j = row; j < numCols; j++)
-                        matrix.setMatrix(i, j, matrix.getPosition(i, j) - factor * matrix.getPosition(row, j));
+                        organizedMatrix.setMatrix(i, j, organizedMatrix.getPosition(i, j) - factor * organizedMatrix.getPosition(row, j));
                     System.out.println("------------------------------------"+(2)+"------------------------------------------");
-                    printMatrix(matrix);
+                    printMatrix(organizedMatrix);
                 }
 
             }
         }
-        organizeMatrix(matrix);
-        printMatrix(matrix);
+        printMatrix(organizedMatrix);
     }
 
 
@@ -227,7 +228,7 @@ public class SystemImplementation implements MatrixSystem {
         return count;
     }
 
-    public void organizeMatrix(Matrix matrix) {
+    public Matrix organizeMatrix(Matrix matrix) {
         int numRows = matrix.getRows();
         int numCols = matrix.getCols();
         Matrix organizedMatrix = new Matrix(numRows, numCols);
@@ -252,7 +253,7 @@ public class SystemImplementation implements MatrixSystem {
             }
         }
 
-        printMatrix(organizedMatrix);
+        return organizedMatrix;
     }
 
     @Override
