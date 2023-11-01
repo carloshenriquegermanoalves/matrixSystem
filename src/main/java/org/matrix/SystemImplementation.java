@@ -207,9 +207,24 @@ public class SystemImplementation implements MatrixSystem {
         return 0;
     }
     public Matrix organizeMatrix(Matrix matrix){
+        double[][] organizedMatrix = new double[matrix.getRows()][matrix.getCols()];
         for (int i = 0; i < matrix.getRows(); i++) {
-
+            for (int j = 0; j < matrix.getCols() ; j++) {
+                if (zeroCounter(matrix.getRowItem(j)) > zeroCounter(matrix.getRowItem(j+1))){
+                    organizedMatrix[i][j] = matrix.getPosition(i+1,j+1);
+                }else{
+                    organizedMatrix[i][j] = matrix.getPosition(i,j);
+                }
+            }
         }
+    }
+
+    public int zeroCounter(double[] row){
+        int counter = 0;
+        for (int i = 0; i < row.length; i++) {
+            counter ++;
+        }
+        return counter;
     }
     @Override
     public void printMatrix(Matrix matrix) {
