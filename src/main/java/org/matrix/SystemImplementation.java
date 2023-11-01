@@ -185,7 +185,6 @@ public class SystemImplementation implements MatrixSystem {
     @Override
     public void transposedMatrix(Matrix matrix) {
         Matrix transposedMatrix = new Matrix(matrix.getCols(), matrix.getRows());
-
         for (int i = 0; i < matrix.getRows(); i++) {
             for (int j = 0; j < matrix.getCols(); j++) {
                 transposedMatrix.setMatrix(j, i, matrix.getPosition(i, j));
