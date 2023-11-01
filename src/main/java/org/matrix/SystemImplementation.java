@@ -127,7 +127,7 @@ public class SystemImplementation implements MatrixSystem {
         int numRows = matrix.getRows();
         int numCols = matrix.getCols();
         for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numCols; col++) {
+                for (int col = row; col < numCols; col++) {
                     double pivot = identifyPivot(matrix, row);
                     matrix.setMatrix(row, col, matrix.getPosition(row, col) / pivot);
                 }
@@ -139,7 +139,8 @@ public class SystemImplementation implements MatrixSystem {
                     }
                 }
             }
-        printMatrix(matrix);
+        Matrix organizedMatrix  = organizeMatrix(matrix);
+        printMatrix(organizedMatrix);
         }
 
 
@@ -206,33 +207,57 @@ public class SystemImplementation implements MatrixSystem {
         }
         return 0;
     }
-    public Matrix organizeMatrix(Matrix matrix){
-        double[][] organizedMatrix = new double[matrix.getRows()][matrix.getCols()];
-        for (int i = 0; i < matrix.getRows(); i++) {
-            for (int j = 0; j < matrix.getCols() ; j++) {
-                if (zeroCounter(matrix.getRowItem(j)) > zeroCounter(matrix.getRowItem(j+1))){
-                    organizedMatrix[i][j] = matrix.getPosition(i+1,j+1);
-                }else{
-                    organizedMatrix[i][j] = matrix.getPosition(i,j);
+    public Matrix organizeMatrix(Matrix matrix) {
+        int numRows = matrix.getRows();
+        int numCols = matrix.getCols();
+        Matrix organizedMatrix = new Matrix(numRows, numCols);
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                organizedMatrix.setMatrix(i, j, matrix.getPosition(i, j));
+            }
+        }
+        for (int i = 0; i < numRows - 1; i++) {
+            for (int j = 0; j < numRows - i - 1; j++) {
+                int zeroCountCurrent = zeroCounter(organizedMatrix.getRowItem(j));
+                int zeroCountNext = zeroCounter(organizedMatrix.getRowItem(j + 1));
+
+                if (zeroCountCurrent > zeroCountNext) {
+                    for (int k = 0; k < numCols; k++) {
+                        double temp = organizedMatrix.getPosition(j, k);
+                        organizedMatrix.setMatrix(j, k, organizedMatrix.getPosition(j + 1, k));
+                        organizedMatrix.setMatrix(j + 1, k, temp);
+                    }
                 }
             }
         }
+
+        return organizedMatrix;
     }
 
-    public int zeroCounter(double[] row){
-        int counter = 0;
-        for (int i = 0; i < row.length; i++) {
-            counter ++;
+
+
+    private int zeroCounter(double[] row) {
+        int count = 0;
+        for (double element : row) {
+            if (element == 0.0) {
+                count++;
+            }
         }
-        return counter;
+        return count;
     }
-    @Override
+
     public void printMatrix(Matrix matrix) {
-        for (int i = 0; i < matrix.getRows(); i++) {
-            for (int j = 0; j < matrix.getCols(); j++)
-                System.out.print("|" + matrix.getPosition(i, j) + "|");
+        int numRows = matrix.getRows();
+        int numCols = matrix.getCols();
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
+                System.out.print(matrix.getPosition(i, j) + " ");
+            }
             System.out.println();
         }
     }
+
+
 
 }
