@@ -21,12 +21,12 @@ public class Main {
                     7. Escalonamento de uma matriz
                     8. Inversa de uma matriz
                     9. Matriz transposta
-                    10. Sair do sistema
-                    11. Organizar matriz
+                    10. Organizar uma matriz
+                    11. Sair do sistema
                     """);
             String option = input.nextLine();
             switch (option) {
-                case "1", "5", "6", "7", "8", "9","11" -> {
+                case "1", "5", "6", "7", "8", "9","10" -> {
                     Matrix matrix = createMatrix(input);
                     System.out.println("Matriz criada com sucesso!");
                     switch (option) {
@@ -43,7 +43,7 @@ public class Main {
                             systemImplementation.printMatrix(matrix);
                             systemImplementation.transposedMatrix(matrix);
                         }
-                        case "11" -> systemImplementation.organizeMatrix(matrix);
+                        case "10" -> systemImplementation.organizeMatrix(matrix);
                     }
                 }
                 case "2", "3", "4" -> {
@@ -55,7 +55,7 @@ public class Main {
                         default -> systemImplementation.multiplyingMatrix(matrix1, matrix2);
                     }
                 }
-                case "10" -> userContinue = false;
+                case "11" -> userContinue = false;
                 default -> System.out.println("Opção inválida! Tente novamente");
             }
         }
