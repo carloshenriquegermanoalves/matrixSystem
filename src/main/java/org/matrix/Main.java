@@ -22,7 +22,6 @@ public class Main {
                     8. Inversa de uma matriz
                     9. Matriz transposta
                     10. Sair do sistema
-                    11. Organizar matriz
                     """);
             String option = input.nextLine();
             switch (option) {
@@ -43,7 +42,6 @@ public class Main {
                             systemImplementation.printMatrix(matrix);
                             systemImplementation.transposedMatrix(matrix);
                         }
-                        case "11" -> systemImplementation.organizeMatrix(matrix);
                     }
                 }
                 case "2", "3", "4" -> {
