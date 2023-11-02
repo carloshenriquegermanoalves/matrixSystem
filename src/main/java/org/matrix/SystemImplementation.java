@@ -129,22 +129,17 @@ public class SystemImplementation implements MatrixSystem {
         int numCols = organizedMatrix.getCols();
         for (int row = 0; row < numRows; row++) {
             double pivot = identifyPivot(organizedMatrix, row);
-            System.out.println("Pivo: " + pivot);
             if (pivot != 0) {
                 for (int col = row; col < numCols; col++) {
                     organizedMatrix.setMatrix(row, col, organizedMatrix.getPosition(row, col) / pivot);
                 }
             }
-            System.out.println("------------------------------------"+(1)+"------------------------------------------");
-            printMatrix(organizedMatrix);
+
             for (int i = 0; i < numRows; i++) {
                 if (i != row) {
-                    double factor = matrix.getPosition(i,getFactor(matrix,row));
-                    System.out.println("Fator: " + factor);
+                    double factor = organizedMatrix.getPosition(i,getPivotPosition(organizedMatrix,row));
                     for (int j = row; j < numCols; j++)
                         organizedMatrix.setMatrix(i, j, organizedMatrix.getPosition(i, j) - factor * organizedMatrix.getPosition(row, j));
-                    System.out.println("------------------------------------"+(2)+"------------------------------------------");
-                    printMatrix(organizedMatrix);
                 }
 
             }
@@ -226,7 +221,7 @@ public class SystemImplementation implements MatrixSystem {
         return count;
     }
 
-    public int getFactor(Matrix matrix, int row){
+    public int getPivotPosition(Matrix matrix, int row){
         for (int cols = 0; cols < matrix.getCols(); cols++) {
             if (matrix.getPosition(row,cols) != 0 ){
                 return cols;
