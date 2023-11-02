@@ -1,5 +1,7 @@
 package org.matrix;
 
+import java.text.DecimalFormat;
+
 public class SystemImplementation implements MatrixSystem {
 
     @Override
@@ -260,11 +262,16 @@ public class SystemImplementation implements MatrixSystem {
 
     @Override
     public void printMatrix(Matrix matrix) {
+        DecimalFormat df = new DecimalFormat("0.00"); // Define o formato para duas casas decimais
         for (int i = 0; i < matrix.getRows(); i++) {
-            for (int j = 0; j < matrix.getCols(); j++)
-                System.out.print("|" + matrix.getPosition(i, j) + "|");
+            for (int j = 0; j < matrix.getCols(); j++) {
+                double value = matrix.getPosition(i, j);
+                String formattedValue = df.format(value); // Formata o número
+                System.out.print("|" + formattedValue + "|");
+            }
             System.out.println();
         }
     }
+
 
 }
