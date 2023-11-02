@@ -21,8 +21,7 @@ public class Main {
                     7. Escalonamento de uma matriz
                     8. Inversa de uma matriz
                     9. Matriz transposta
-                    10. Organizar uma matriz
-                    11. Sair do sistema
+                    10. Sair do sistema
                     """);
             String option = input.nextLine();
             switch (option) {
@@ -43,7 +42,6 @@ public class Main {
                             systemImplementation.printMatrix(matrix);
                             systemImplementation.transposedMatrix(matrix);
                         }
-                        case "10" -> systemImplementation.organizeMatrix(matrix);
                     }
                 }
                 case "2", "3", "4" -> {
