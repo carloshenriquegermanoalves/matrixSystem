@@ -139,8 +139,8 @@ public class SystemImplementation implements MatrixSystem {
             printMatrix(organizedMatrix);
             for (int i = 0; i < numRows; i++) {
                 if (i != row) {
-                    double factor = matrix.getPosition(i,row);
-
+                    double factor = matrix.getPosition(i,getFactor(matrix,row));
+                    System.out.println("Fator: " + factor);
                     for (int j = row; j < numCols; j++)
                         organizedMatrix.setMatrix(i, j, organizedMatrix.getPosition(i, j) - factor * organizedMatrix.getPosition(row, j));
                     System.out.println("------------------------------------"+(2)+"------------------------------------------");
@@ -179,13 +179,11 @@ public class SystemImplementation implements MatrixSystem {
                 inverseMatrix.setMatrix(i, j, augmentedMatrix.getPosition(i, col + j));
             }
         }
-
     }
 
     @Override
     public void transposedMatrix(Matrix matrix) {
         Matrix transposedMatrix = new Matrix(matrix.getCols(), matrix.getRows());
-
         for (int i = 0; i < matrix.getRows(); i++) {
             for (int j = 0; j < matrix.getCols(); j++) {
                 transposedMatrix.setMatrix(j, i, matrix.getPosition(i, j));
@@ -226,6 +224,15 @@ public class SystemImplementation implements MatrixSystem {
             }
         }
         return count;
+    }
+
+    public int getFactor(Matrix matrix, int row){
+        for (int cols = 0; cols < matrix.getCols(); cols++) {
+            if (matrix.getPosition(row,cols) != 0 ){
+                return cols;
+            }
+        }
+        return 0;
     }
 
     public Matrix organizeMatrix(Matrix matrix) {
