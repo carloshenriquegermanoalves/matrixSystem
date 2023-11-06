@@ -25,7 +25,7 @@ class SystemImplementationTest {
         System.out.println("-------------------------Matriz escalonada-------------------------");
         system.scaleMatrix(matrix2);
         System.out.println("------------------------------3------------------------------------");
-        double[][] matrixTemp3 = {{1,2,3},{4,5,6},{7,8,9}};
+        double[][] matrixTemp3 = {{1,2,3},{2,4,6},{7,8,9}};
         Matrix matrix3 = new Matrix(3,3);
         matrix3.setMatrix(matrixTemp3);
         System.out.println("-------------------------Matriz sem escalonamento------------------");

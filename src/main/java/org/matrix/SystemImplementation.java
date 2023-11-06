@@ -131,7 +131,7 @@ public class SystemImplementation implements MatrixSystem {
         int numCols = organizedMatrix.getCols();
         for (int row = 0; row < numRows; row++) {
             double pivot = identifyPivot(organizedMatrix, row);
-            if (pivot != 0) {
+            if (pivot != 0){
                 for (int col = row; col < numCols; col++) {
                     organizedMatrix.setMatrix(row, col, organizedMatrix.getPosition(row, col) / pivot);
                 }
@@ -146,6 +146,7 @@ public class SystemImplementation implements MatrixSystem {
 
             }
         }
+        //organizedMatrix = organizeMatrix(organizedMatrix);
         printMatrix(organizedMatrix);
     }
 
@@ -210,7 +211,7 @@ public class SystemImplementation implements MatrixSystem {
                 return matrix.getPosition(row,cols);
             }
         }
-        return 0;
+        return -1;
     }
 
     public int zeroCounter(double[] row) {
@@ -258,6 +259,15 @@ public class SystemImplementation implements MatrixSystem {
         }
 
         return organizedMatrix;
+    }
+
+    public boolean verificarLinhaNula(Matrix matrix, int row){
+        for (int i = 0; i < row; i++) {
+            if (matrix.getPosition(i,row) != 0){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
