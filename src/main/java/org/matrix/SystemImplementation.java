@@ -130,6 +130,7 @@ public class SystemImplementation implements MatrixSystem {
         int numRows = organizedMatrix.getRows();
         int numCols = organizedMatrix.getCols();
         for (int row = 0; row < numRows; row++) {
+            organizedMatrix = organizeMatrix(organizedMatrix);
             double pivot = identifyPivot(organizedMatrix, row);
             if (pivot != 0){
                 for (int col = row; col < numCols; col++) {
@@ -211,7 +212,7 @@ public class SystemImplementation implements MatrixSystem {
                 return matrix.getPosition(row,cols);
             }
         }
-        return -1;
+        return 0;
     }
 
     public int zeroCounter(double[] row) {
